@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+	<string name="incremental_search_street_in_country">Search street incrementally. At least 3 chars. Can take long time!</string>
+	
 	<string name="create_poi_link_to_osm_doc"><u>Online OSM</u> map classification with images</string>
     <string name="error_doing_search">Error occurred in offline search</string>
     <string name="search_offline_geo_error">Could not parse geo intent:{0}</string>

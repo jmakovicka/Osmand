@@ -5,7 +5,10 @@ import static net.osmand.plus.CollatorStringMatcher.cstartsWith;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -251,7 +254,25 @@ public class RegionAddressRepositoryBinary implements RegionAddressRepository {
 			return null;
 		}
 		preloadCities();
-		return cities.get(id);
+		City city = cities.get(id);
+		if (city == null) {
+			return getVilageById(id);
+		} else {
+			return city;
+		}
+	}
+
+	private City getVilageById(Long id) {
+		try {
+			for (City c : file.getVillages(region)) {
+				if (c.getId().equals(id)) {
+					return c;
+				}
+			}
+		} catch (IOException e) {
+			log.error("Disk operation failed", e); //$NON-NLS-1$
+		}
+		return null;
 	}
 
 

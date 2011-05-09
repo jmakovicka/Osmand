@@ -1,6 +1,7 @@
 package net.osmand.plus;
 
 import java.text.Collator;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -84,5 +85,6 @@ public interface RegionAddressRepository {
 	
 	// called to close resources
 	public void close();
+
 	
 }

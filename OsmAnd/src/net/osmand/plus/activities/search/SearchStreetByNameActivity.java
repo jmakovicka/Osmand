@@ -18,6 +18,8 @@ public class SearchStreetByNameActivity extends SearchByNameAbstractActivity<Str
 	private RegionAddressRepository region;
 	private City city;
 	private PostCode postcode;
+	private String oldfilter = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SharedPreferences prefs = OsmandSettings.getPrefs(this);

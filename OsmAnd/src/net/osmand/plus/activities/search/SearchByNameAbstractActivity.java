@@ -1,6 +1,7 @@
 package net.osmand.plus.activities.search;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import net.osmand.plus.R;
 import android.app.ListActivity;
@@ -78,11 +79,13 @@ public abstract class SearchByNameAbstractActivity<T> extends ListActivity {
 		runOnUiThread(new Runnable(){
 			@Override
 			public void run() {
-				((NamesAdapter)getListAdapter()).setNotifyOnChange(false);
+				NamesAdapter namesAdapter = (NamesAdapter)getListAdapter();
+				namesAdapter.setNotifyOnChange(false);
+				namesAdapter.clear();
 				for(T o : objects){
-					((NamesAdapter)getListAdapter()).add(o);
+					namesAdapter.add(o);
 				}
-				((NamesAdapter)getListAdapter()).notifyDataSetChanged();
+				namesAdapter.notifyDataSetChanged();
 				progress.setVisibility(View.INVISIBLE);
 			}
 		});
@@ -93,7 +96,6 @@ public abstract class SearchByNameAbstractActivity<T> extends ListActivity {
 			((NamesAdapter) getListAdapter()).getFilter().filter(filter);
 			return;
 		}
-		((NamesAdapter) getListAdapter()).clear();
 
 		if(handlerToLoop == null){
 			return;
@@ -104,13 +106,28 @@ public abstract class SearchByNameAbstractActivity<T> extends ListActivity {
 			public void run() {
 				showProgress(View.VISIBLE);
 				List<T> loadedObjects = getObjects(filter);
-				if(handlerToLoop != null && !handlerToLoop.hasMessages(1)){
-					updateUIList(loadedObjects);
-				}
+				updateUIList(loadedObjects);
+				//because of incremental, wait for the ui update
+				waitForUIThread();
 			}
 		});
 		msg.what = 1;
 		handlerToLoop.sendMessageDelayed(msg, 150);
+	}
+
+	private void waitForUIThread() {
+		final Semaphore semafor = new Semaphore(1);
+		try {
+			semafor.acquire();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					semafor.release();
+				}
+			});
+			semafor.acquire();
+		} catch (InterruptedException e) {
+		}
 	}
 	
 	private void showProgress(final int v){
@@ -174,10 +191,17 @@ public abstract class SearchByNameAbstractActivity<T> extends ListActivity {
 	
 
 	class NamesAdapter extends ArrayAdapter<T> {
+		private final List<T> list;
+
 		NamesAdapter(List<T> list) {
 			super(SearchByNameAbstractActivity.this, R.layout.searchbyname_list, list);
+			this.list = list;
 		}
 
+		public List<T> getList() {
+			return list;
+		}
+		
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View row;
 			if (convertView != null) {
