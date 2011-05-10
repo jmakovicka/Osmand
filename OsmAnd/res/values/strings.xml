@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+	<string name="animate_route_off">Animate off</string>
+	<string name="animate_route">Animate on</string>
+
 	<string name="tip_update_index">Index updating</string>
 	<string name="tip_update_index_t">Very important is to have actual map data. Osmand is equipped with good download manager with which you can easily check if your indexes can be updated.
 	\n\tFor checking updates go to \'Main Menu\'->\'Settings\'->\'Data for offline usage\'->\'Download offline data\'. After reloading index list from internet, select option \'Filter downloaded\' from context menu.
