@@ -159,7 +159,7 @@ public class MapActivity extends Activity implements IMapLocationListener, Senso
 	private OsmandSettings settings;
 
 	private RouteAnimation routeAnimation = new RouteAnimation();
-	
+
 	private boolean isMapLinkedToLocation(){
 		return settings.isMapSyncToGpsLocation();
 	}
