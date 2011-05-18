@@ -26,7 +26,6 @@ import net.osmand.osm.LatLon;
 import net.osmand.plus.BusyIndicator;
 import net.osmand.plus.FavouritesDbHelper;
 import net.osmand.plus.OsmandSettings;
-import net.osmand.plus.OsmandSettings.ApplicationMode;
 import net.osmand.plus.PoiFilter;
 import net.osmand.plus.PoiFiltersHelper;
 import net.osmand.plus.R;
@@ -1019,7 +1018,7 @@ public class MapActivity extends Activity implements IMapLocationListener, Senso
 					: R.string.animate_route);
 			animateMenu.setVisible("1".equals(Secure.getString(
 					getContentResolver(), Secure.ALLOW_MOCK_LOCATION))
-					&& OsmandSettings.getPointToNavigate(settings) != null
+					&& settings.getPointToNavigate() != null
 					&& routingHelper.isRouteCalculated());
 		}
 		
@@ -1030,9 +1029,9 @@ public class MapActivity extends Activity implements IMapLocationListener, Senso
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.map_show_settings:
-			final Intent settings = new Intent(MapActivity.this,
+			final Intent settingsIntent = new Intent(MapActivity.this,
 					SettingsActivity.class);
-			startActivity(settings);
+			startActivity(settingsIntent);
 			return true;
 		case R.id.map_where_am_i:
 			backToLocationImpl();
@@ -1086,17 +1085,18 @@ public class MapActivity extends Activity implements IMapLocationListener, Senso
 					!routingHelper.getVoiceRouter().isMute());
 			return true;
 		case R.id.map_navigate_to_point:
-    		if(navigationLayer.getPointToNavigate() != null){
-    			if(routingHelper.isRouteCalculated()){
-    				routingHelper.setFinalAndCurrentLocation(null, null);
-    				settings.FOLLOW_TO_THE_ROUTE.set(false);
-    				routingHelper.setFollowingMode(false);
-    			} else {
-    				navigateToPoint(null);
-    			}
-    		} else {
-    			navigateToPoint(new LatLon(mapView.getLatitude(), mapView.getLongitude()));
-    		}
+			if (navigationLayer.getPointToNavigate() != null) {
+				if (routingHelper.isRouteCalculated()) {
+					routingHelper.setFinalAndCurrentLocation(null, null);
+					settings.FOLLOW_TO_THE_ROUTE.set(false);
+					routingHelper.setFollowingMode(false);
+				} else {
+					navigateToPoint(null);
+				}
+			} else {
+				navigateToPoint(new LatLon(mapView.getLatitude(),
+						mapView.getLongitude()));
+			}
 			mapView.refreshMap();
 			return true;
 		case R.id.map_gpx_routing:
@@ -1106,7 +1106,7 @@ public class MapActivity extends Activity implements IMapLocationListener, Senso
 			contextMenuPoint(mapView.getLatitude(), mapView.getLongitude());
 			return true;
 		case R.id.map_animate_route:
-			//animate moving on route
+			// animate moving on route
 			routeAnimation.startStopRouteAnimation(routingHelper, this);
 			return true;
 		default:
