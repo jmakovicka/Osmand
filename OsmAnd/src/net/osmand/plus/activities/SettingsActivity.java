@@ -347,7 +347,8 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 		}
 		tileSourcePreference.setSummary(summary + mapName);
 	}
-    
+
+  
 	private void fill(ListPreference component, String[] list, String[] values, String selected) {
 		component.setEntries(list);
 		component.setEntryValues(values);
@@ -376,7 +377,7 @@ public class SettingsActivity extends PreferenceActivity implements OnPreference
 			// Specific actions after list preference changed
 			if (changed) {
 				if (listPref.getId().equals(osmandSettings.VOICE_PROVIDER.getId())) {
-					getMyApplication().initCommandPlayer();
+					getMyApplication().showDialogInitializingCommandPlayer(this);
 				} else if (listPref.getId().equals(osmandSettings.APPLICATION_MODE.getId())) {
 					updateAllSettings();
 				} else if (listPref.getId().equals(osmandSettings.PREFERRED_LOCALE.getId())) {
