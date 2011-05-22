@@ -111,12 +111,6 @@ public class RoutingHelper {
 				.unmodifiableList(currentGPXRoute);
 	}
 	
-	public List<Location> getCurrentRoute() {
-		return currentGPXRoute == null || currentGPXRoute.isEmpty() ? Collections
-				.unmodifiableList(routeNodes) : Collections
-				.unmodifiableList(currentGPXRoute);
-	}
-	
 	public void setFinalLocation(LatLon finalLocation){
 		setFinalAndCurrentLocation(finalLocation, getCurrentLocation());
 	}

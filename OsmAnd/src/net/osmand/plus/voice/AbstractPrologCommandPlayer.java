@@ -68,8 +68,7 @@ public abstract class AbstractPrologCommandPlayer implements CommandPlayer {
 		prologSystem.clearTheory();
 		voiceDir = null;
 		if (voiceProvider != null) {
-			File parent = OsmandSettings.extendOsmandPath(ctx,
-					ResourceManager.VOICE_PATH);
+			File parent =  OsmandSettings.getOsmandSettings(ctx).extendOsmandPath(ResourceManager.VOICE_PATH);
 			voiceDir = new File(parent, voiceProvider);
 			if (!voiceDir.exists()) {
 				voiceDir = null;

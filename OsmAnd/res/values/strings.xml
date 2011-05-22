@@ -3,7 +3,6 @@
 	<string name="animate_route_off">Animate off</string>
 	<string name="animate_route">Animate on</string>
 
-<<<<<<< OURS
 	<string name="tip_update_index">Index updating</string>
 	<string name="tip_update_index_t">Very important is to have actual map data. Osmand is equipped with good download manager with which you can easily check if your indexes can be updated.
 	\n\tFor checking updates go to \'Main Menu\'->\'Settings\'->\'Data for offline usage\'->\'Download offline data\'. After reloading index list from internet, select option \'Filter downloaded\' from context menu.
@@ -33,10 +32,6 @@
 	\n\tFor displaying all Favorite points directly on map, you can enable layer \'Favorites\' in \'Map context menu\'->\'Layers\'.</string>
 	<string name="tip_osm_improve">Openstreetmap improving</string>
 	<string name="tip_osm_improve_t">OsmAnd uses maps based on Openstreetmap.org data and it is designed not only for trips and routing but for improving and helping to Openstreetmap project too. You can easily create and upload new POI or OSM bug with just some clicks!
-=======
-	<string name="tip_osm_help">Openstreetmap improving</string>
-	<string name="tip_osm_help_t">OsmAnd uses maps based on Openstreetmap.org data and it is designed not only for trips and routing but for improving and helping to Openstreetmap project too. You can easily create and upload new POI or OSM bug with just some clicks!
->>>>>>> THEIRS
 \nAt first you need to enter login information in \'Main Menu\'->\'Settings\'->\'OSM\'.
 \n\tFor new POI adding you can use option \'Create POI\' in Map context menu. Then you can proceed with entering information about new POI in Create POI dialog and finally Commit it.
 \n\tIf you find some error in the map, you can report that and Openstreetmap community can then faster fix this problem.
