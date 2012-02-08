@@ -39,7 +39,7 @@ public class SQLiteTileSource implements ITileSource {
 	private int maxZoom = 17; 
 	private int baseZoom = 17; //Default base zoom
 
-	final int margin = 6;
+	final int margin = 2;
 	final int tileSize = 256;
 	
 	public SQLiteTileSource(File f, List<TileSourceTemplate> toFindUrl){
@@ -213,6 +213,7 @@ public class SQLiteTileSource implements ITileSource {
 		if(db == null){
 			return null;
 		}
+		System.gc();
         Bitmap stitchedImage = Bitmap.createBitmap(tileSize + 2 * margin, tileSize + 2 * margin, Config.ARGB_8888);
         Canvas canvas = new Canvas(stitchedImage);
         
@@ -277,6 +278,9 @@ public class SQLiteTileSource implements ITileSource {
 	        int offset_x=  x - (base_xtile << n);
 	        int offset_y=  y - (base_ytile << n);
 	        int flags = 0x020;
+
+	        if (scaledSize < 8)
+	        	return null;
 	        
 	        if (offset_x == 0)
 	        	flags |= 0x444;
@@ -286,7 +290,7 @@ public class SQLiteTileSource implements ITileSource {
 	        	flags |= 0x700;
 	        else if (offset_y == (1 << n) - 1)
 	        	flags |= 0x007;
-
+			
 			Bitmap metaTile = getMetaTile(base_xtile, base_ytile, baseZoom, flags);
 			
 			if(metaTile != null){
@@ -294,19 +298,20 @@ public class SQLiteTileSource implements ITileSource {
 		        int delta_px = scaledSize * offset_x;
 		        int delta_py = scaledSize * offset_y;
 		        
-				Bitmap xn = Bitmap.createBitmap(metaTile,
-						delta_px, //(+6)
-						delta_py, //(+6)
-						scaledSize + 2 * margin,
-						scaledSize + 2 * margin);
-				metaTile.recycle();
-				int scaleto = 256 + ((2 * margin) << n);
-				Bitmap scaled = Bitmap.createScaledBitmap(xn,scaleto,scaleto,true);
-				xn.recycle();
-				return Bitmap.createBitmap(scaled, (margin << n), (margin << n), 256, 256);
+		        Bitmap xn = Bitmap.createBitmap(metaTile,
+		        		delta_px, //(+6)
+		        		delta_py, //(+6)
+		        		scaledSize + 2 * margin,
+		        		scaledSize + 2 * margin);
+		        metaTile.recycle();
+		        int scaleto = tileSize + ((2 * margin) << n);
+		        System.gc();
+		        Bitmap scaled = Bitmap.createScaledBitmap(xn,scaleto,scaleto,true);
+		        xn.recycle();
+		        return Bitmap.createBitmap(scaled, (margin << n), (margin << n), tileSize, tileSize);
 			}
 			return null;
-			}
+		}
 	}
 	public ITileSource getBase() {
 		return base;
