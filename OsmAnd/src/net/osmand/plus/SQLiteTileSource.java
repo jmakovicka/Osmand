@@ -201,7 +201,7 @@ public class SQLiteTileSource implements ITileSource {
 		return db.isDbLockedByOtherThreads();
 	}
 
-	private Bitmap getMetaTile(int x, int y, int zoom) {
+	private Bitmap getMetaTile(int x, int y, int zoom, int flags) {
 		// return a 268x268 tile ((6+256+6)x(6+256+6) px) around a given tile
 		// based on its neighbor. This is needed to have a nice bilinear resampling
 		// on tile edges. A 258x258 would do well, but maybe somebody wants to
@@ -218,6 +218,9 @@ public class SQLiteTileSource implements ITileSource {
         
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
+            	if ((flags & (0x400 >> (4 * (dy + 1) + (dx + 1)))) == 0)
+            		continue;
+            	
             	int xOff, yOff, w, h;
             	int dstx, dsty;
         		Cursor cursor = db.rawQuery(
@@ -269,14 +272,25 @@ public class SQLiteTileSource implements ITileSource {
 			int n = zoom - baseZoom;
 			int base_xtile = x >> n;
 			int base_ytile = y >> n;
-			
-			Bitmap metaTile = getMetaTile(base_xtile, base_ytile, baseZoom);
+
+			int scaledSize= tileSize >> n;
+	        int offset_x=  x - (base_xtile << n);
+	        int offset_y=  y - (base_ytile << n);
+	        int flags = 0x020;
+	        
+	        if (offset_x == 0)
+	        	flags |= 0x444;
+	        else if (offset_x == (1 << n) - 1)
+	        	flags |= 0x111;
+	        if (offset_y == 0)
+	        	flags |= 0x700;
+	        else if (offset_y == (1 << n) - 1)
+	        	flags |= 0x007;
+
+			Bitmap metaTile = getMetaTile(base_xtile, base_ytile, baseZoom, flags);
 			
 			if(metaTile != null){
 				// in tile space:
-				int scaledSize= tileSize >> n;
-		        int offset_x=  x - (base_xtile << n);
-		        int offset_y=  y - (base_ytile << n);
 		        int delta_px = scaledSize * offset_x;
 		        int delta_py = scaledSize * offset_y;
 		        
