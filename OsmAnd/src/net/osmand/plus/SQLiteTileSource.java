@@ -39,7 +39,7 @@ public class SQLiteTileSource implements ITileSource {
 	private int maxZoom = 17; 
 	private int baseZoom = 17; //Default base zoom
 
-	final int margin = 2;
+	final int margin = 1;
 	final int tileSize = 256;
 	
 	public SQLiteTileSource(File f, List<TileSourceTemplate> toFindUrl){
@@ -202,18 +202,14 @@ public class SQLiteTileSource implements ITileSource {
 	}
 
 	private Bitmap getMetaTile(int x, int y, int zoom, int flags) {
-		// return a 268x268 tile ((6+256+6)x(6+256+6) px) around a given tile
+		// return a (tileSize+2*margin)^2 tile around a given tile
 		// based on its neighbor. This is needed to have a nice bilinear resampling
-		// on tile edges. A 258x258 would do well, but maybe somebody wants to
-		// implement bicubic resampling for nicer effect.
-		// The code looks bad because we load only one 256x256 bitmap at a time
-		// instead of cropping from a 768x768 bitmap, which causes memory issues.
+		// on tile edges. Margin of 1 is enough for bilinear resampling.
 		
 		SQLiteDatabase db = getDatabase();
 		if(db == null){
 			return null;
 		}
-		System.gc();
         Bitmap stitchedImage = Bitmap.createBitmap(tileSize + 2 * margin, tileSize + 2 * margin, Config.ARGB_8888);
         Canvas canvas = new Canvas(stitchedImage);
         
@@ -247,8 +243,7 @@ public class SQLiteTileSource implements ITileSource {
         		}
             }
         }
-		System.gc();
-		return stitchedImage; // return a 256x256 tile + 6px margin
+		return stitchedImage; // return a tileSize+2*margin size image
 		
 	}
 	public Bitmap getImage(int x, int y, int zoom) {
@@ -299,13 +294,12 @@ public class SQLiteTileSource implements ITileSource {
 		        int delta_py = scaledSize * offset_y;
 		        
 		        Bitmap xn = Bitmap.createBitmap(metaTile,
-		        		delta_px, //(+6)
-		        		delta_py, //(+6)
+		        		delta_px,
+		        		delta_py,
 		        		scaledSize + 2 * margin,
 		        		scaledSize + 2 * margin);
 		        metaTile.recycle();
 		        int scaleto = tileSize + ((2 * margin) << n);
-		        System.gc();
 		        Bitmap scaled = Bitmap.createScaledBitmap(xn,scaleto,scaleto,true);
 		        xn.recycle();
 		        return Bitmap.createBitmap(scaled, (margin << n), (margin << n), tileSize, tileSize);
