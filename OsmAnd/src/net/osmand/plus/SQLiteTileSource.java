@@ -42,7 +42,6 @@ public class SQLiteTileSource implements ITileSource {
 	private int maxZoom = 17; 
 	private int baseZoom = 17; //Default base zoom
 
-	final int margin = 1;
 	final int tileSize = 256;
 	
 	public SQLiteTileSource(File f, List<TileSourceTemplate> toFindUrl){
@@ -204,7 +203,7 @@ public class SQLiteTileSource implements ITileSource {
 		return db.isDbLockedByOtherThreads();
 	}
 
-	private Bitmap getMetaTile(int x, int y, int zoom, int flags) {
+	private Bitmap getMetaTile(int x, int y, int zoom, int margin, int flags) {
 		// return a (tileSize+2*margin)^2 tile around a given tile
 		// based on its neighbor. This is needed to have a nice bilinear resampling
 		// on tile edges. Margin of 1 is enough for bilinear resampling.
@@ -289,7 +288,7 @@ public class SQLiteTileSource implements ITileSource {
 	        else if (offset_y == (1 << n) - 1)
 	        	flags |= 0x007;
 			
-			Bitmap metaTile = getMetaTile(base_xtile, base_ytile, baseZoom, flags);
+			Bitmap metaTile = getMetaTile(base_xtile, base_ytile, baseZoom, 1, flags);
 			
 			if(metaTile != null){
 				// in tile space:
@@ -297,11 +296,11 @@ public class SQLiteTileSource implements ITileSource {
 		        int delta_py = scaledSize * offset_y;
 		        
 		        RectF src = new RectF(0.5f, 0.5f,
-		        		scaledSize + 2 * margin - 0.5f, scaledSize + 2 * margin - 0.5f);
+		        		scaledSize + 1.5f, scaledSize + 1.5f);
 		        RectF dest = new RectF(0, 0, tileSize, tileSize);
 		        Matrix m = new Matrix();
 		        m.setRectToRect(src, dest, Matrix.ScaleToFit.FILL);
-		        return Bitmap.createBitmap(metaTile, delta_px, delta_py, scaledSize + 2*margin-1, scaledSize + 2*margin-1, m, true);
+		        return Bitmap.createBitmap(metaTile, delta_px, delta_py, scaledSize + 1, scaledSize + 1, m, true);
 			}
 			return null;
 		}
