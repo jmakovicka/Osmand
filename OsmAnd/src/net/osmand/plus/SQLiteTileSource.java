@@ -25,7 +25,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Matrix;
-import android.graphics.Matrix.ScaleToFit;
 
 public class SQLiteTileSource implements ITileSource {
 
