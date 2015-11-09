@@ -18,5 +18,6 @@ if [ ! -d "$ANDROID_NDK_ROOT" ]; then
 	exit
 fi
 export BUILD_ONLY_OLD_LIB=1
+export NDK_CCACHE=/usr/bin/ccache
 "$SCRIPT_LOC/../../core-legacy/externals/configure.sh"
-(cd "$SCRIPT_LOC" && "$ANDROID_NDK_ROOT/ndk-build" -j2)
+(cd "$SCRIPT_LOC" && "$ANDROID_NDK_ROOT/ndk-build" -j4)
