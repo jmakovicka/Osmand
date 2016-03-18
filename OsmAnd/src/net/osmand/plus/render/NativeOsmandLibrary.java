@@ -33,8 +33,13 @@ public class NativeOsmandLibrary extends NativeLibrary {
 				if (!isLoaded()) {
 					isNativeSupported = false;
 					try {
-						log.debug("Loading native gnustl_shared..."); //$NON-NLS-1$
-						System.loadLibrary("gnustl_shared");
+						try {
+							log.debug("Loading native c++_shared..."); //$NON-NLS-1$
+							System.loadLibrary("c++_shared");
+						} catch( UnsatisfiedLinkError e ) {
+							log.debug("Loading native gnustl_shared..."); //$NON-NLS-1$
+							System.loadLibrary("gnustl_shared");
+						}
 						if (android.os.Build.VERSION.SDK_INT >= 8) {
 							log.debug("Loading jnigraphics, since Android >= 2.2 ..."); //$NON-NLS-1$
 							try {

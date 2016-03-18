@@ -1,19 +1,11 @@
-APP_STL := gnustl_shared
+APP_STL := c++_shared
 APP_CPPFLAGS := -std=c++11 -fexceptions -frtti
 APP_SHORT_COMMANDS := true
 
 # Specify least supported Android platform version
 APP_PLATFORM := android-9
 
-ifeq ($(wildcard $(ANDROID_NDK)/toolchains/*-4.7),)
-	ifeq ($(wildcard $(ANDROID_NDK)/toolchains/*-4.8),)
-		NDK_TOOLCHAIN_VERSION := 4.9
-	else
-		NDK_TOOLCHAIN_VERSION := 4.8
-	endif
-else
-	NDK_TOOLCHAIN_VERSION := 4.7
-endif
+NDK_TOOLCHAIN_VERSION := clang
 
 APP_ABI :=
 ifneq ($(filter x86,$(OSMAND_ARCHITECTURES_SET)),)
