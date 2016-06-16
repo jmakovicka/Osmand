@@ -231,15 +231,15 @@ public class OsmAndLocationProvider implements SensorEventListener {
 
 	public void resumeAllUpdates() {
 		final LocationManager service = (LocationManager) app.getSystemService(Context.LOCATION_SERVICE);
-		if (app.getSettings().isInternetConnectionAvailable()) {
-			if (System.currentTimeMillis() - app.getSettings().AGPS_DATA_LAST_TIME_DOWNLOADED.get() > AGPS_TO_REDOWNLOAD) {
-				//force an updated check for internet connectivity here before destroying A-GPS-data
-				if (app.getSettings().isInternetConnectionAvailable(true)) {
-					redownloadAGPS();
+		if (isLocationPermissionAvailable(app)) {
+			if (app.getSettings().isInternetConnectionAvailable()) {
+				if (System.currentTimeMillis() - app.getSettings().AGPS_DATA_LAST_TIME_DOWNLOADED.get() > AGPS_TO_REDOWNLOAD) {
+					//force an updated check for internet connectivity here before destroying A-GPS-data
+					if (app.getSettings().isInternetConnectionAvailable(true)) {
+						redownloadAGPS();
+					}
 				}
 			}
-		}
-		if (isLocationPermissionAvailable(app)) {
 			service.addGpsStatusListener(getGpsStatusListener(service));
 			try {
 				service.requestLocationUpdates(LocationManager.GPS_PROVIDER, GPS_TIMEOUT_REQUEST, GPS_DIST_REQUEST, gpsListener);
