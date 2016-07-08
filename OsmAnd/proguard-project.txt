@@ -15,6 +15,7 @@
 -dontoptimize
 -dontshrink
 -dontwarn alice.**
+-dontwarn bsh.**
 -verbose
 
 #-keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
