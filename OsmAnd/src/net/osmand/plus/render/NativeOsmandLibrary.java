@@ -32,33 +32,33 @@ public class NativeOsmandLibrary extends NativeLibrary {
 			synchronized (NativeOsmandLibrary.class) {
 				if (!isLoaded()) {
 					isNativeSupported = false;
-					try {
-						try {
-							log.debug("Loading native c++_shared..."); //$NON-NLS-1$
-							System.loadLibrary("c++_shared");
-						} catch( UnsatisfiedLinkError e ) {
-							log.debug("Loading native gnustl_shared..."); //$NON-NLS-1$
-							System.loadLibrary("gnustl_shared");
-						}
-						if (android.os.Build.VERSION.SDK_INT >= 8) {
-							log.debug("Loading jnigraphics, since Android >= 2.2 ..."); //$NON-NLS-1$
-							try {
-								System.loadLibrary("jnigraphics");
-							} catch( UnsatisfiedLinkError e ) {
-								// handle "Shared library already opened" error
-								log.debug("Failed to load jnigraphics: " + e); //$NON-NLS-1$
-							}
-						}
-						log.debug("Loading native libraries..."); //$NON-NLS-1$
-                        System.loadLibrary("osmand");
-						log.debug("Creating NativeOsmandLibrary instance..."); //$NON-NLS-1$
-						library = new NativeOsmandLibrary();
-						log.debug("Initializing rendering rules storage..."); //$NON-NLS-1$
-						NativeOsmandLibrary.initRenderingRulesStorage(storage);
-						isNativeSupported = true;
-					} catch (Throwable e) {
-						log.error("Failed to load native library", e); //$NON-NLS-1$
-					}
+//					try {
+//						try {
+//							log.debug("Loading native c++_shared..."); //$NON-NLS-1$
+//							System.loadLibrary("c++_shared");
+//						} catch( UnsatisfiedLinkError e ) {
+//							log.debug("Loading native gnustl_shared..."); //$NON-NLS-1$
+//							System.loadLibrary("gnustl_shared");
+//						}
+//						if (android.os.Build.VERSION.SDK_INT >= 8) {
+//							log.debug("Loading jnigraphics, since Android >= 2.2 ..."); //$NON-NLS-1$
+//							try {
+//								System.loadLibrary("jnigraphics");
+//							} catch( UnsatisfiedLinkError e ) {
+//								// handle "Shared library already opened" error
+//								log.debug("Failed to load jnigraphics: " + e); //$NON-NLS-1$
+//							}
+//						}
+//						log.debug("Loading native libraries..."); //$NON-NLS-1$
+//                        System.loadLibrary("osmand");
+//						log.debug("Creating NativeOsmandLibrary instance..."); //$NON-NLS-1$
+//						library = new NativeOsmandLibrary();
+//						log.debug("Initializing rendering rules storage..."); //$NON-NLS-1$
+//						NativeOsmandLibrary.initRenderingRulesStorage(storage);
+//						isNativeSupported = true;
+//					} catch (Throwable e) {
+//						log.error("Failed to load native library", e); //$NON-NLS-1$
+//					}
 				}
 			}
 			
