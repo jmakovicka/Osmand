@@ -18,7 +18,7 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 23
-	buildToolsVersion "23.0.3"
+	buildToolsVersion "24.0.0"
 
 	signingConfigs {
 		development {
@@ -42,6 +42,14 @@ android {
 		versionCode System.getenv("APK_NUMBER_VERSION") ? System.getenv("APK_NUMBER_VERSION").toInteger() : versionCode
 		multiDexEnabled true
 		versionName System.getenv("APK_VERSION")? System.getenv("APK_VERSION").toString(): versionName
+		jackOptions {
+			enabled true
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_7
+		targetCompatibility JavaVersion.VERSION_1_7
 	}
 
 	lintOptions {
@@ -89,7 +97,7 @@ android {
 	productFlavors {
 		// ABI
 		armv8 {
-			flavorDimension "abi"
+			dimension "abi"
 			ndk {
 				abiFilter "arm64-v8a"
 			}
@@ -113,7 +121,7 @@ android {
 			}
 		}
 		x64 {
-			flavorDimension "abi"
+			dimension "abi"
 			ndk {
 				abiFilter "x86_64"
 			}
@@ -340,9 +348,8 @@ task cleanupDuplicatesInCore() {
 		file("libs/x86/libgnustl_shared.so").renameTo(file("libgnustl/x86/libgnustl_shared.so"))
 	}
 }
-tasks.withType(JavaCompile) {
-	compileTask -> compileTask.dependsOn << [collectExternalResources, buildOsmAndCore, cleanupDuplicatesInCore]
-}
+
+preBuild.dependsOn << [collectExternalResources, buildOsmAndCore, cleanupDuplicatesInCore]
 
 task appStart(type: Exec) {
 	// linux 
