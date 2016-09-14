@@ -17,8 +17,8 @@ apply plugin: 'com.android.application'
 // Less important
 
 android {
-	compileSdkVersion 23
-	buildToolsVersion "24.0.1"
+	compileSdkVersion 24
+	buildToolsVersion "24.0.2"
 
 	signingConfigs {
 		development {
@@ -38,7 +38,7 @@ android {
 
 	defaultConfig {
 		minSdkVersion System.getenv("MIN_SDK_VERSION") ? System.getenv("MIN_SDK_VERSION").toInteger() : 14
-		targetSdkVersion 23
+		targetSdkVersion 24
 		versionCode System.getenv("APK_NUMBER_VERSION") ? System.getenv("APK_NUMBER_VERSION").toInteger() : versionCode
 		multiDexEnabled true
 		versionName System.getenv("APK_VERSION")? System.getenv("APK_VERSION").toString(): versionName
