@@ -3,6 +3,9 @@ package net.osmand.plus.api;
 import net.osmand.plus.OsmandApplication;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+
+import java.io.File;
 
 public class SQLiteAPIImpl implements SQLiteAPI {
 
@@ -14,12 +17,22 @@ public class SQLiteAPIImpl implements SQLiteAPI {
 
 	@Override
 	public SQLiteConnection getOrCreateDatabase(String name, boolean readOnly) {
-		android.database.sqlite.SQLiteDatabase db = app.openOrCreateDatabase(name,
-				readOnly ? SQLiteDatabase.OPEN_READONLY : (SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING), null);
-		if(db == null) {
+		File dbPath = app.getDatabasePath(name);
+		if (dbPath.getParentFile() != null && !dbPath.getParentFile().exists()) {
+			try {
+				dbPath.getParentFile().mkdir();
+			} catch (SecurityException e) {
+				return null;
+			}
+		}
+		try {
+			android.database.sqlite.SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath.getAbsolutePath(), null,
+					(readOnly ? SQLiteDatabase.OPEN_READONLY : (SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING))
+							| SQLiteDatabase.CREATE_IF_NECESSARY);
+			return new SQLiteDatabaseWrapper(db);
+		} catch (SQLiteException e) {
 			return null;
 		}
-		return new SQLiteDatabaseWrapper(db) ;
 	}
 	
 	
@@ -186,11 +199,12 @@ public class SQLiteAPIImpl implements SQLiteAPI {
 	@Override
 	public SQLiteConnection openByAbsolutePath(String path, boolean readOnly) {
 		// fix http://stackoverflow.com/questions/26937152/workaround-for-nexus-9-sqlite-file-write-operations-on-external-dirs
-		android.database.sqlite.SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null,
-				readOnly? SQLiteDatabase.OPEN_READONLY : (SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING));
-		if(db == null) {
+		try {
+			android.database.sqlite.SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null,
+					readOnly? SQLiteDatabase.OPEN_READONLY : (SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING));
+			return new SQLiteDatabaseWrapper(db) ;
+		} catch (SQLiteException e) {
 			return null;
 		}
-		return new SQLiteDatabaseWrapper(db) ;
 	}
 }
