@@ -18,6 +18,8 @@ apply from: 'build-common.gradle'
 // Less important
 
 android {
+	ndkVersion "22.0.7026061"
+
 	signingConfigs {
 		development {
 			storeFile file("../keystores/debug.keystore")
@@ -59,11 +61,12 @@ android {
 	}
 
 	// related to kuromoji
-	//packagingOptions {
+	packagingOptions {
+		jniLibs.useLegacyPackaging false
 	//	exclude '/META-INF/CONTRIBUTORS.md'
 	//	exclude '/META-INF/LICENSE.md'
 	//	exclude '/META-INF/NOTICE.md'
-	//}
+	}
 
 	sourceSets {
 		debug {
@@ -170,7 +173,7 @@ android {
 
 afterEvaluate {
 	android.applicationVariants.all { variant ->
-		variant.javaCompiler.dependsOn(collectExternalResources, buildOsmAndCore, cleanupDuplicatesInCore)
+		variant.javaCompileProvider.get().dependsOn(collectExternalResources, buildOsmAndCore, cleanupDuplicatesInCore)
 	}
 	Gradle gradle = getGradle()
 	String tskReqStr = gradle.getStartParameter().getTaskRequests().toString().toLowerCase()

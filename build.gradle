@@ -3,14 +3,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven {
             url 'https://developer.huawei.com/repo/'
         }
     }
     dependencies {
         //classpath 'com.android.tools.build:gradle:2.+'
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.2.0-beta06'
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -24,19 +23,18 @@ buildscript {
 
 allprojects {
     group "net.osmand"
-    version "1.0"    
-        
+    version "1.0"
+
     repositories {
         ivy {
             name = "OsmAndBinariesIvy"
             url = "https://builder.osmand.net"
-            layout "pattern", {
+            patternLayout {
                 artifact "ivy/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
             }
         }
         google()
         mavenCentral()
-        jcenter()
         maven {
             url "https://jitpack.io"
         }

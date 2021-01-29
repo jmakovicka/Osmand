@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android-extensions'
 
 android {
-	compileSdkVersion 29
+	compileSdkVersion 30
 
 	sourceSets {
 		main {
@@ -21,7 +21,7 @@ android {
 
 	defaultConfig {
 		applicationId "net.osmand.telegram"
-		minSdkVersion 15
+		minSdkVersion 16
 		targetSdkVersion 29
 		multiDexEnabled true
 		versionCode 1
@@ -130,8 +130,8 @@ task collectExternalResources {
 
 afterEvaluate {
 	android.applicationVariants.all { variant ->
-		variant.javaCompiler.dependsOn(downloadPrebuiltTelegram, collectExternalResources)
-		variant.preBuild.dependsOn(downloadPrebuiltTelegram)
+		variant.javaCompileProvider.get().dependsOn(downloadPrebuiltTelegram, collectExternalResources)
+		variant.preBuildProvider.get().dependsOn(downloadPrebuiltTelegram)
 	}
 }
 

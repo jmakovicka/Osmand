@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 28
+	compileSdkVersion 30
 
 	signingConfigs {
 		development {
@@ -20,7 +20,7 @@ android {
 	}
 
 	defaultConfig {
-		minSdkVersion 15
+		minSdkVersion 16
 		targetSdkVersion 27
 	}
 
@@ -55,7 +55,7 @@ repositories {
 	ivy {
 		name = "OsmAndBinariesIvy"
 		url = "https://builder.osmand.net"
-		layout "pattern", {
+		patternLayout {
 			artifact "ivy/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
 		}
 	}

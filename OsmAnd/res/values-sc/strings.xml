@@ -880,8 +880,7 @@
     <string name="tts_missing_language_data">Cheres andare a su Market pro iscarrigare sa limba isseberada?</string>
     <string name="gpx_option_destination_point">Imprea puntu de detinatzione atuale</string>
     <string name="gpx_option_from_start_point">Rucra totu sa rasta</string>
-    <string name="switch_to_vector_map_to_see">Mapa vetoriale non in lìnia disponìbile pro cust\'àera.
-\n\t\n\tPro l\'impreare ativare \'Menù\' → \'Cunfigura sa mapa\' → \'Mitza mapa…\' → \'Mapas vetoriales non in lìnia\'.</string>
+    <string name="switch_to_vector_map_to_see">Mapa vetoriale non in lìnia disponìbile pro cust\'àera.\n\t\n\tPro l\'impreare ativare \'Menù\' → \'Cunfigura sa mapa\' → \'Mitza mapa…\' → \'Mapas vetoriales non in lìnia\'.</string>
     <string name="vector_data">Mapas vetoriales non in lìnia</string>
     <string name="choose_audio_stream">Canale d\'essida de sa boghe de ghia</string>
     <string name="choose_audio_stream_descr">Ischerta s\'altoparlante pro sa ghia vocale.</string>
